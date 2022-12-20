@@ -90,9 +90,7 @@ const THRESH = document.getElementById('thresh');
 
 const DistanceMSG = document.getElementById('distance');
 let timestamp = 0;
-let distance = 0;
-let timer = 0;
-let receive = false;
+
 const IDX_LIST = [
     [826, 828, 830, 832, 834],
     [841, 843, 845, 847, 849],
@@ -104,26 +102,23 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 7; // 396 四進位 00 -> 0, 01 -> 1, 10 -> 2, 11 -> 3
-
+const tranMessage = 7;
+let receive = false;
 let SI_BC = null;
 let message = '';
-let limit = (200 / (340 * 100)) * 2;
+let limit = (2 / 340) * 2;
 function countDown() {
     setInterval(() => {
-        if (((Date.now - timer) * 1000 >= limit) && receive == false) {
-            alert('超出距離')
-        } else {
-            countDown();
+        if (((Date.now - timestamp) * 1000 >= limit) && receive == false) {
+            alert('超出距離');
+            clearInterval();
         }
-
     }, 10);
 }
 function broadcast(fb) {
     receive = false;
 
     timestamp = Date.now();
-    timer = Date.now();
     countDown();
     // frequency band
     if (
@@ -267,10 +262,9 @@ function listen() {
     }
     //send 7 receive 11
     if (code[0] == [1, 0, 1, 1]) {
-        recevie = ture;
-        let timeDiff = Math.floor((Date.now() - timestamp) / 1000);
-        let distance = parseInt(timeDiff * 340.29 * 100)
-        timestamp = Date.now();
+        receive = ture;
+        timeDiff = Math.floor((Date.now() - timestamp) / 1000);
+        distance = parseInt(timeDiff * 340.29 * 100)
         DistanceMSG.innerHTML = distance.toString() + ' cm';
         if (distance > 200) {
             alert('範圍外');
