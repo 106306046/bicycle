@@ -107,20 +107,17 @@ let receive = false;
 let SI_BC = null;
 let message = '';
 let limit = (2 / 340) * 2;
-function countDown() {
-    console.log(Date.now(), timestamp);
-    setInterval(() => {
-        if (((Date.now - timestamp) * 1000 >= limit) && receive == false) {
-            alert('超出距離');
-            clearInterval();
-        }
-    }, 10);
-}
+
 function broadcast(fb) {
     receive = false;
 
     timestamp = Date.now();
-    countDown();
+    countDown = setInterval(() => {
+        if (((Date.now - timestamp) * 1000 >= limit) && receive == false) {
+            alert('超出距離');
+            clearInterval(countDown);
+        }
+    }, 10);;
     // frequency band
     if (
         SI_BC !== null ||
