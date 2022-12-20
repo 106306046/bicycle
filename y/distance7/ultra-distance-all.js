@@ -343,6 +343,4 @@ setInterval(() => {
         THRESH.innerText = `${dataBuffer.length}: AVG { ${avgThreshold[0]} | ${avgThreshold[1]} }`;
         draw();
     } catch { }
-
-    console.log(dataArray);
 }, 33);
