@@ -102,11 +102,11 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 11;
+const tranMessage = 11;//change
 let receive = false;
 let SI_BC = null;
 let message = '';
-let limit = (2 / 340) * 2;
+const timer_limit = 5;
 
 function broadcast(fb) {
     receive = false;
@@ -115,11 +115,12 @@ function broadcast(fb) {
     countDown = setInterval(() => {
         now = Date.now();
         console.log(now, timestamp);
-        if (((now - timestamp) / 1000 >= limit) && receive == false) {
+        if (((now - timestamp) / 1000 >= timer_limit) && receive == false) {
             alert('超出距離');
             clearInterval(countDown);
         }
     }, 10);
+
     // frequency band
     if (
         SI_BC !== null ||
@@ -261,7 +262,7 @@ function listen() {
         }
     }
     //send 11 [1011] receive 7[0111]
-    if (code[0] == [0, 1, 1, 1]) {
+    if (code[0] == [0, 1, 1, 1]) {//change
         receive = ture;
         timeDiff = Math.floor((Date.now() - timestamp) / 1000);
         distance = parseInt(timeDiff * 340.29 * 100)
