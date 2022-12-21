@@ -113,7 +113,9 @@ function broadcast(fb) {
 
     timestamp = Date.now();
     countDown = setInterval(() => {
-        if (((Date.now - timestamp) * 1000 >= limit) && receive == false) {
+        now = Date.now();
+        console.log(now, timestamp);
+        if (((now - timestamp) / 1000 >= limit) && receive == false) {
             alert('超出距離');
             clearInterval(countDown);
         }
