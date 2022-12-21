@@ -244,6 +244,9 @@ function listen() {
             }
         }
     }
+    if (code[0] == [0, 1, 1, 1]) {
+        alert('收');
+    }
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 // setInterval(listen, 33);
