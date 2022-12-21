@@ -96,8 +96,8 @@ const IDX_LIST = [
     [841, 843, 845, 847, 849],
 ];
 const FR_LIST = [
-    [500, 500, 500, 500],
-    [500, 500, 500, 500],
+    [19380, 19423, 19466, 19510],
+    [19724, 19767, 19810, 19854],
 ];
 //const BANDWIDTH = 4;
 
@@ -105,6 +105,7 @@ const FR_LIST = [
 const tranMessage = 7;//change
 let receive = false;
 let SI_BC = null;
+let countDown = null
 let message = '';
 const timer_limit = 5;
 
@@ -112,21 +113,19 @@ function broadcast(fb) {
     receive = false;
 
     timestamp = Date.now();
-    countDown = setInterval(() => {
-        now = Date.now();
-        console.log(now, timestamp);
-        if (((now - timestamp) / 1000 >= timer_limit) && receive == false) {
-            alert('超出距離');
-            clearInterval(countDown);
-        }
-    }, 10);
+    if (countDown == null) {
+        countDown = setInterval(() => {
+            if (receive == false) {
+                alert('超出距離');
+                clearInterval(countDown);
+                countDown = null;
+            }
+        }, 5000);
+    }
 
-    // frequency band
     if (
         SI_BC !== null ||
-        tranMessage < 0 ||
-        tranMessage > 15 ||
-        isNaN(tranMessage)
+        countDown != null
     )
         return;
 
@@ -136,8 +135,7 @@ function broadcast(fb) {
         soundControl[audioControlCount - 1 - i] = message % 2 === 1;
         message = Math.floor(message / 2);
     }
-    console.log(soundControl)
-    console.log(message)
+    console.log(soundControl);
 
     let shouldKill = false;
     for (let i = 0; i < audioControlCount; i++) {
@@ -266,6 +264,8 @@ function listen() {
     if (code[0] == [1, 0, 1, 1]) {//change
         alert('收到11');//change
         receive = ture;
+        clearInterval(countDown);
+        countDown = null;
         // timeDiff = Math.floor((Date.now() - timestamp) / 1000);
         // distance = parseInt(timeDiff * 340.29 * 100)
         // DistanceMSG.innerHTML = distance.toString() + ' cm';
