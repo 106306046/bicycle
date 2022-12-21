@@ -204,6 +204,7 @@ function beforeListen() {
 }
 
 function listen() {
+    console.log('listen');
     CONSOLE.innerText = '';
     RECVMSG.innerText = '';
     THRESH.innerText = '';
