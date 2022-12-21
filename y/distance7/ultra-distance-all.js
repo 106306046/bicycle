@@ -96,8 +96,8 @@ const IDX_LIST = [
     [841, 843, 845, 847, 849],
 ];
 const FR_LIST = [
-    [19380, 19423, 19466, 19510],
-    [19724, 19767, 19810, 19854],
+    [500, 500, 500, 500],
+    [500, 500, 500, 500],
 ];
 //const BANDWIDTH = 4;
 
@@ -204,7 +204,7 @@ function beforeListen() {
 }
 
 function listen() {
-    console.log('listen');
+
     CONSOLE.innerText = '';
     RECVMSG.innerText = '';
     THRESH.innerText = '';

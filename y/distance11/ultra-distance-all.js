@@ -179,6 +179,7 @@ let avgThreshold = [
 let dataBuffer = [];
 let count = 0;
 let FB_LENGTH = 2;
+
 function beforeListen() {
     if (count >= avgAmount) {
         isListenReady = true;
@@ -204,6 +205,7 @@ function beforeListen() {
 }
 
 function listen() {
+
     CONSOLE.innerText = '';
     RECVMSG.innerText = '';
     THRESH.innerText = '';
@@ -212,6 +214,7 @@ function listen() {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
     ];
+
     let d, prev;
     for (let fb = 0; fb < FB_LENGTH; fb++) {
         for (let i = 0; i < audioControlCount; i++) {
