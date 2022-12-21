@@ -265,12 +265,12 @@ function listen() {
     if (code[0] == [0, 1, 1, 1]) {//change
         alert('收到7');//change
         receive = ture;
-        timeDiff = Math.floor((Date.now() - timestamp) / 1000);
-        distance = parseInt(timeDiff * 340.29 * 100)
-        DistanceMSG.innerHTML = distance.toString() + ' cm';
-        if (distance > 200) {
-            alert('範圍外');
-        }
+        // timeDiff = Math.floor((Date.now() - timestamp) / 1000);
+        // distance = timeDiff * 340
+        // DistanceMSG.innerHTML = `${distance.toString()} m`;
+        // if (distance > 2) {
+        //     alert('兩公尺外');
+        // }
     }
 
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
