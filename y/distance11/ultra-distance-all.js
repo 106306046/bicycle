@@ -117,7 +117,7 @@ function broadcast(fb) {
             alert('超出距離');
             clearInterval(countDown);
         }
-    }, 10);;
+    }, 10);
     // frequency band
     if (
         SI_BC !== null ||
