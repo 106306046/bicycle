@@ -70,7 +70,7 @@ function handleSuccess(stream) {
 
     // VISUAL
     analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
+    analyser.fftSize = 2048; //the window size of the FFT. A higher value will result in more details in the frequency domain but fewer details in the time domain
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
@@ -177,6 +177,7 @@ let avgThreshold = [
 let dataBuffer = [];
 let count = 0;
 let FB_LENGTH = 2;
+
 function beforeListen() {
     if (count >= avgAmount) {
         isListenReady = true;
@@ -211,6 +212,7 @@ function listen() {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
     ];
+
     let d, prev;
     for (let fb = 0; fb < FB_LENGTH; fb++) {
         for (let i = 0; i < audioControlCount; i++) {
@@ -260,19 +262,19 @@ function listen() {
             }
         }
     }
-
+    //send 11 [1011] receive 7[0111]
     if (code[0] == [1, 0, 1, 1]) {//change
         alert('收到11');//change
         receive = ture;
         clearInterval(countDown);
         countDown = null;
         // timeDiff = Math.floor((Date.now() - timestamp) / 1000);
-        // distance = parseInt(timeDiff * 340.29 * 100)
-        // DistanceMSG.innerHTML = distance.toString() + ' cm';
-        // if (distance > 200) {
-        //     alert('範圍外');
+        // distance = timeDiff * 340
+        // DistanceMSG.innerHTML = `${distance.toString()} m`;
+        // if (distance > 2) {
+        //     alert('兩公尺外');
         // }
-    }
+    };
 
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }

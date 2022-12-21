@@ -274,7 +274,7 @@ function listen() {
         // if (distance > 2) {
         //     alert('兩公尺外');
         // }
-    }
+    };
 
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
