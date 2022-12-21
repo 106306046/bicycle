@@ -110,8 +110,14 @@ let message = '';
 const timer_limit = 5;
 
 function broadcast(fb) {
-    receive = false;
 
+    if (
+        SI_BC !== null ||
+        countDown != null
+    )
+        return;
+
+    receive = false;
     timestamp = Date.now();
     if (countDown == null) {
         countDown = setInterval(() => {
@@ -122,12 +128,6 @@ function broadcast(fb) {
             }
         }, 5000);
     }
-
-    if (
-        SI_BC !== null ||
-        countDown != null
-    )
-        return;
 
     let message = tranMessage;
     let soundControl = [];
