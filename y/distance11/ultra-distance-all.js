@@ -263,6 +263,7 @@ function listen() {
     }
     //send 11 [1011] receive 7[0111]
     if (code[0] == [0, 1, 1, 1]) {//change
+        alert('收到7');//change
         receive = ture;
         timeDiff = Math.floor((Date.now() - timestamp) / 1000);
         distance = parseInt(timeDiff * 340.29 * 100)
