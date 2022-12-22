@@ -247,16 +247,22 @@ function listen() {
     }
 
     //check receive
-    let same = 1;
-    for (i = 0; i < audioControlCount; i++) {
-        check = code[i] == binary_recMessage[i];
-        same *= same;
-    }
-    if (same) {
+    if (check_array(code[0], binary_recMessage) || check_array(code[1], binary_recMessage)) {
         alert('收到');
     }
 
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
+}
+
+function check_array(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
 }
 // setInterval(listen, 33);
 //#endregion
