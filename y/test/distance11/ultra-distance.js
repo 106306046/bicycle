@@ -1,15 +1,12 @@
 // DEVICES
 let isIOS = 'webkitAudioContext' in window;
-
 // AUDIO
 let audioContext = null;
-const audioControlCount = 4;
-let oscillators = [];
-let gainNodes = [];
+let oscillator = null;
+let gainNode = null;
 let analyser = null;
 let bufferLength = null;
 let dataArray = null;
-
 // IOS SAFARI NOT SUPPORTED HIGHPASSFILTER
 if (isIOS) {
     navigator.mediaDevices
@@ -55,18 +52,16 @@ function handleSuccess(stream) {
         audioContext = new window.AudioContext();
     }
     // SOUND
-    for (let i = 0; i < audioControlCount; i++) {
-        oscillators[i] = audioContext.createOscillator();
-        gainNodes[i] = audioContext.createGain();
-        gainNodes[i].gain.value = 0;
-    }
+    oscillator = audioContext.createOscillator();
+    oscillator.frequency.value = 440;
 
-    for (let i = 0; i < audioControlCount; i++) {
-        oscillators[i].connect(gainNodes[i]);
-        gainNodes[i].connect(audioContext.destination);
-    }
+    gainNode = audioContext.createGain();
+    gainNode.gain.value = 0;
 
-    for (let i = 0; i < audioControlCount; i++) oscillators[i].start();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
 
     // VISUAL
     analyser = audioContext.createAnalyser();
@@ -99,152 +94,126 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 11; // 396 四進位 00 -> 0, 01 -> 1, 10 -> 2, 11 -> 3
+const tranMessage = '132303130'; // 396 四進位 00 -> 0, 01 -> 1, 10 -> 2, 11 -> 3
 
 let SI_BC = null;
 let message = '';
 function broadcast(fb) {
     // frequency band
-    if (
-        SI_BC !== null ||
-        tranMessage < 0 ||
-        tranMessage > 15 ||
-        isNaN(tranMessage)
-    )
-        return;
+    if (SI_BC !== null) return;
 
-    let message = tranMessage;
-    let soundControl = [];
-    for (let i = 0; i < audioControlCount; i++) {
-        soundControl[audioControlCount - 1 - i] = message % 2 === 1;
-        message = Math.floor(message / 2);
-    }
-    console.log(soundControl)
-    console.log(message)
+    // TimeStamp
+    // let now = new Date();
+    // let t = now.getMilliseconds();
+    // let timestamp = '';
+    // for (let i = 0; i < 5; i++) {
+    //     timestamp += (t % BANDWIDTH).toString();
+    //     t = Math.floor(t / BANDWIDTH);
+    // }
+    // timestamp = timestamp.split('').reverse().join('');
 
-    let shouldKill = false;
-    for (let i = 0; i < audioControlCount; i++) {
-        oscillators[i].frequency.value = FR_LIST[fb][i];
-    }
+    // Message
+    message = '';
+    message += tranMessage;
+    //message += timestamp;
+
+    let LIST = FR_LIST[fb].map((x) => x);
+    let REST = false;
     SI_BC = setInterval(() => {
-        if (shouldKill) {
-            for (let i = 0; i < audioControlCount; i++) {
-                message = null;
-                gainNodes[i].gain.value = 0;
-                clearInterval(SI_BC);
-                SI_BC = null;
-            }
-            shouldKill = false;
+        // Check Ending
+        if (message.length === 0) {
+            message = '';
+            gainNode.gain.value = 0;
+            clearInterval(SI_BC);
+            SI_BC = null;
             return;
-        } else {
-            for (let i = 0; i < audioControlCount; i++) {
-                if (soundControl[i]) gainNodes[i].gain.value = 0.5;
-                else gainNodes[i].gain.value = 0;
-            }
-            shouldKill = true;
         }
-    }, 1000);
+
+        // Make Sound
+        if (!REST) {
+            oscillator.frequency.value = LIST[message[0]];
+            gainNode.gain.value = 1;
+            REST = true;
+            message = message.slice(1);
+        } else {
+            gainNode.gain.value = 0;
+            REST = false;
+        }
+    }, 300);
 }
 //#endregion
 
 //#region Listen Sound Code
 let recvMessage = ['', ''];
+let cur = [-1, -1];
+let count = [0, 0];
+let LEASTCOUNT = 10;
 let lastTime = [0, 0];
-let MAXTIME = 700;
-let threshold = 80;
-let offset = 10;
-let isListenReady = false;
-let avgAmount = 50;
-let avgThreshold = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-];
-let dataBuffer = [];
-let count = 0;
+let MAXTIME = 1500;
+let threshold = [0, 0];
 let FB_LENGTH = 2;
-function beforeListen() {
-    if (count >= avgAmount) {
-        isListenReady = true;
-        return;
-    }
-    for (let fb = 0; fb < FB_LENGTH; fb++) {
-        for (let i = 0; i < audioControlCount; i++) {
-            let d = 0,
-                len = 0;
-            for (let v = IDX_LIST[fb][i]; v < IDX_LIST[fb][i + 1]; v++) {
-                len++;
-                d += dataArray[v];
-            }
-            d /= len;
-            avgThreshold[fb][i] = (
-                (avgThreshold[fb][i] * count + d) /
-                (count + 1)
-            ).toFixed(2);
-        }
-    }
-    dataBuffer.push(dataArray.slice());
-    count++;
-}
-
 function listen() {
+    // analyser.getByteFrequencyData(dataArray);
+
     CONSOLE.innerText = '';
     RECVMSG.innerText = '';
     THRESH.innerText = '';
 
-    let curThreshold = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-    ];
-    let d, prev;
     for (let fb = 0; fb < FB_LENGTH; fb++) {
-        for (let i = 0; i < audioControlCount; i++) {
-            d = 0;
-            prev = 0;
-            let len = 0;
-            for (let v = IDX_LIST[fb][i]; v < IDX_LIST[fb][i + 1]; v++) {
-                len++;
-                d += dataArray[v];
-                prev += dataBuffer[0][v];
-            }
-            d /= len;
-            prev /= len;
-            avgThreshold[fb][i] = (
-                (avgThreshold[fb][i] * avgAmount - prev + d) /
-                avgAmount
-            ).toFixed(2);
-            curThreshold[fb][i] = d.toFixed(2);
-        }
-    }
-    dataBuffer.push(dataArray.slice());
-    dataBuffer.shift();
+        let peak = -1;
+        let peakWeight = 0;
+        let sumThreshold = 0;
+        for (let i = IDX_LIST[fb][0] - 1; i < IDX_LIST[fb][4] + 1; i++) {
+            let v = dataArray[i];
 
-    let maxThreshold = [0, 0];
-    for (let fb = 0; fb < FB_LENGTH; fb++) {
-        for (let i = 0; i < audioControlCount; i++) {
-            if (
-                curThreshold[fb][i] > avgThreshold[fb][i] * 1.5 &&
-                curThreshold[fb][i] > avgThreshold[fb][i] + threshold
-            ) {
-                if (maxThreshold[fb] < curThreshold[fb][i])
-                    maxThreshold[fb] = curThreshold[fb][i];
+            if (peakWeight < v) {
+                peak = i;
+                peakWeight = v;
             }
-        }
-    }
 
-    let code = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-    ];
-    for (let fb = 0; fb < FB_LENGTH; fb++) {
-        if (maxThreshold[fb] !== 0) {
-            for (let i = 0; i < audioControlCount; i++) {
-                if (curThreshold[fb][i] > maxThreshold[fb] - offset) {
-                    code[fb][i] = 1;
+            sumThreshold += v;
+        }
+        threshold[fb] = sumThreshold / (IDX_LIST[fb][4] - IDX_LIST[fb][0] + 2);
+
+        if (
+            peak >= IDX_LIST[fb][0] &&
+            peak < IDX_LIST[fb][4] &&
+            (peakWeight > threshold[fb] * 2.5 ||
+                peakWeight > threshold[fb] + 40)
+        ) {
+            for (let i = 0; i < IDX_LIST[fb].length - 1; i++) {
+                if (peak >= IDX_LIST[fb][i] && peak < IDX_LIST[fb][i + 1]) {
+                    if (i === cur[fb]) {
+                        count[fb]++;
+
+                        if (count[fb] > LEASTCOUNT) {
+                            cur[fb] = -1;
+                            count[fb] = 0;
+                            recvMessage[fb] += i.toString();
+                        }
+                    } else {
+                        cur[fb] = i;
+                        count[fb] = 1;
+                        let d = new Date();
+                        lastTime[fb] = d.getTime();
+                    }
+                    break;
                 }
             }
         }
+
+        let d = new Date();
+        let time = d.getTime();
+        if (time - lastTime[fb] > MAXTIME) {
+            recvMessage[fb] = '';
+            cur[fb] = -1;
+            count[fb] = 0;
+        }
+
+        THRESH.innerText += `\n${threshold[fb]}`;
+        RECVMSG.innerText += `\n${recvMessage[fb]}`;
+        CONSOLE.innerText += `\ncur = ${cur[fb]}, peak = ${peak}: ${peakWeight} -> ${count[fb]}`;
     }
-    RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 // setInterval(listen, 33);
 //#endregion
@@ -300,7 +269,7 @@ function draw() {
         canvasContext.moveTo(0, -threshold[1] + canvas.height);
         canvasContext.lineTo(canvas.width, -threshold[1] + canvas.height);
         canvasContext.stroke();
-    } catch { }
+    } catch {}
 }
 draw();
 //#endregion
@@ -310,11 +279,7 @@ draw();
 setInterval(() => {
     try {
         analyser.getByteFrequencyData(dataArray);
-        if (isListenReady) listen();
-        else beforeListen();
-        THRESH.innerText = `${dataBuffer.length}: AVG { ${avgThreshold[0]} | ${avgThreshold[1]} }`;
+        listen();
         draw();
-    } catch { }
-
-    console.log(dataArray);
+    } catch {}
 }, 33);

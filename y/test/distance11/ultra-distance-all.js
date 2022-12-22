@@ -99,7 +99,8 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 11; // 396 四進位 00 -> 0, 01 -> 1, 10 -> 2, 11 -> 3
+const tranMessage = 11;
+const binary_recMessage = [0, 1, 1, 1];
 
 let SI_BC = null;
 let message = '';
@@ -244,6 +245,17 @@ function listen() {
             }
         }
     }
+
+    //check receive
+    let same = 1;
+    for (i = 0; i < audioControlCount; i++) {
+        check = code[i] == binary_recMessage[i];
+        same *= same;
+    }
+    if (same) {
+        alert('收到');
+    }
+
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 // setInterval(listen, 33);
