@@ -99,7 +99,7 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 'A';
+const tranMessage = 'B';
 const code1 = '000';
 const code2 = '011';
 
@@ -250,6 +250,7 @@ function listen() {
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 
+/* 
 function check_array(a, b) {
     if (a === b) return true;
     if (a == null || b == null) return false;
@@ -279,8 +280,8 @@ function receive(array) {
 
 }
 
+*/
 
-// setInterval(listen, 33);
 //#endregion
 
 /**********************************************************************************************/
@@ -294,5 +295,5 @@ setInterval(() => {
         draw();
     } catch { }
 
-    console.log(dataArray);
+    // console.log(dataArray);
 }, 33);

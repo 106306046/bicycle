@@ -250,6 +250,7 @@ function listen() {
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 
+/* 
 function check_array(a, b) {
     if (a === b) return true;
     if (a == null || b == null) return false;
@@ -279,8 +280,8 @@ function receive(array) {
 
 }
 
+*/
 
-// setInterval(listen, 33);
 //#endregion
 
 /**********************************************************************************************/
