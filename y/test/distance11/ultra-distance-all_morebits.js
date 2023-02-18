@@ -108,8 +108,7 @@ let message = '';
 function broadcast(fb) { //default fb == 0 
     // frequency band
     if (
-        SI_BC !== null ||
-        isNaN(tranMessage)
+        SI_BC !== null
     )
         return;
 
@@ -121,6 +120,8 @@ function broadcast(fb) { //default fb == 0
     reversed_message = binary_message.split("").reverse().join("");
     combined_code_message = code1 + reversed_message;
     soundControl = combined_code_message.split("");
+
+    console.log(soundControl);
 
     let shouldKill = false;
     for (let i = 0; i < audioControlCount; i++) {
