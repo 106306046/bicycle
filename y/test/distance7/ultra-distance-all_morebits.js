@@ -122,6 +122,8 @@ function broadcast(fb) { //default fb == 0
     combined_code_message = code1 + reversed_message;
     soundControl = combined_code_message.split("");
 
+    console.log(soundControl);
+
     let shouldKill = false;
     for (let i = 0; i < audioControlCount; i++) {
         oscillators[i].frequency.value = FR_LIST[fb][i];
