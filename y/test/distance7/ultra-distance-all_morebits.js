@@ -106,14 +106,17 @@ const code2 = '011';
 let SI_BC = null;
 let message = '';
 function broadcast(fb) { //default fb == 0 
-    // frequency band
-    if (
-        SI_BC !== null
-    )
-        return;
 
     let message = tranMessage;
     let soundControl = [];
+
+    console.log('broadcast:' + soundControl);
+    // frequency band
+    if (SI_BC != null) {
+        return;
+    }
+
+
 
     ascii_message = message.charCodeAt();
     binary_message = ascii_message.toString(2);
@@ -121,7 +124,7 @@ function broadcast(fb) { //default fb == 0
     combined_code_message = code1 + reversed_message;
     soundControl = combined_code_message.split("");
 
-    console.log(soundControl);
+    console.log('broadcast translated maessage:' + soundControl);
 
     let shouldKill = false;
     for (let i = 0; i < audioControlCount; i++) {
