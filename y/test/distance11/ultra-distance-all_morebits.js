@@ -109,8 +109,6 @@ function broadcast(fb) { //default fb == 0
     // frequency band
     if (
         SI_BC !== null ||
-        tranMessage < 0 ||
-        tranMessage > 15 ||
         isNaN(tranMessage)
     )
         return;
