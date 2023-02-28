@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/signal.ico" type="image/x-icon" />
+    <title>Prototype</title>
+</head>
+
+<script src="button.js"></script>
+
+<body>
+
+    <div class="top" id="default">
+
+        <div class="colorBK" id="whitle">
+
+            <div class="logo"><img src="img/signal.png"></div>
+            <div class="wave"></div>
+
+        </div>
+
+        <div class="title">Ultra Sonic Ranging</div>
+        <div class="title" id="subtitle">PRESS START TO TRACK</div>
+
+    </div>
+
+    <div class="top hidden" id="running">
+
+        <div class="colorBK" id="green">
+
+            <div class="logo">
+                <img id="green_logo" src="img/arrow-up-circle.png">
+                <div class="circle delay1"></div>
+                <div class="circle delay2"></div>
+                <div class="circle delay3"></div>
+                <div class="circle delay4"></div>
+            </div>
+
+        </div>
+
+        <div class="title">KEEP GOING</div>
+        <div class="title" id="subtitle">Rear signal received</div>
+
+    </div>
+
+    <button id="start_button" type="button" onclick="start()">START</button>
+    <button class="hidden" id="stop_button" type="button" onclick="stop()">STOP</button>
+</body>
+<style>
+    @media screen and (max-width: 400px) {
+        body {
+            width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 400px) {
+        body {
+            width: 400px;
+        }
+    }
+
+    body {
+        margin: 0 auto;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    body div {
+        margin: 0 auto;
+        padding: 10px 0;
+    }
+
+    button {
+        width: 40%;
+        margin: 0 auto;
+        border: none;
+        border-radius: 10%;
+        height: 6vw;
+        font-size: 3vw;
+    }
+
+    .top {
+        width: 100%;
+    }
+
+    .colorBK {
+        width: 100%;
+        height: 300px;
+        border-radius: 5%;
+        text-align: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    #whitle {
+        background-color: #fff;
+        border: 1px #d9d9d9 solid;
+    }
+
+    #green {
+        background-color: #00FF47;
+    }
+
+    #red {
+        background-color: #DB2F2F;
+    }
+
+    .logo {
+        width: 40%;
+        margin: 0 auto;
+        position: relative;
+        display: block;
+    }
+
+    .logo img {
+        width: 100%;
+        position: relative;
+        z-index: 10;
+    }
+
+    #green_logo {
+        background-color: #00FF47;
+        border-radius: 50%;
+    }
+
+    .wave,
+    .wave::before,
+    .wave::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 250vw;
+        height: 250vw;
+        margin-left: -125vw;
+        transform-origin: 50% 50%;
+        background-color: transparent;
+        border-radius: 38% 42%;
+        box-shadow: inset 0 0 10vw rgba(255, 0, 255, 0.8);
+        animation: spin 16s infinite linear;
+        mix-blend-mode: multiply;
+    }
+
+    .wave::before {
+        width: 105%;
+        height: 95%;
+        margin-top: -125vw;
+        transform-origin: 49% 51%;
+        border-radius: 40% 38%;
+        box-shadow: inset 0 0 10vw rgba(255, 255, 0, 0.8);
+        animation: spin 13s infinite linear;
+    }
+
+    .wave::after {
+        width: 102%;
+        height: 98%;
+        margin-top: -125vw;
+        transform-origin: 51% 49%;
+        border-radius: 48% 42%;
+        box-shadow: inset 0 0 10vw rgba(0, 255, 255, 0.8);
+        animation: spin 10s infinite linear;
+    }
+
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .container {
+        position: relative;
+        display: block;
+        width: 80px;
+        margin: 60px auto;
+    }
+
+    .delay1 {
+        animation: waves 5s infinite;
+    }
+
+    .delay2 {
+        animation: waves 5s infinite .7s forwards,
+    }
+
+    .delay3 {
+        animation: waves 5s infinite 1.3s forwards;
+    }
+
+    .delay4 {
+        animation: waves 5s infinite 1.9s forwards;
+    }
+
+
+    .circle {
+        display: block;
+        height: 0;
+        width: 80%;
+        padding-bottom: 80%;
+        border-radius: 50%;
+        box-shadow: inset 0 0 5vw #fff;
+        transition: 5s ease;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    @keyframes waves {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+
+    .title {
+        padding: 30px 0;
+        font-size: 5vw;
+        text-align: center;
+    }
+
+    #subtitle {
+        font-size: 3vw;
+        color: #424242;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+</html>
