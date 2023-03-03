@@ -46,6 +46,21 @@
 
     </div>
 
+    <div class="top hidden" id="warning">
+
+        <div class="colorBK" id="red">
+
+            <div class="logo">
+                <img id="red_logo" src="img/alert-circle.png">
+            </div>
+
+        </div>
+
+        <div class="title">SLOW DOWN</div>
+        <div class="title" id="subtitle">Rear signal lost</div>
+
+    </div>
+
     <button id="start_button" type="button" onclick="start()">START</button>
     <button class="hidden" id="stop_button" type="button" onclick="stop()">STOP</button>
 </body>
@@ -127,6 +142,11 @@
 
     #green_logo {
         background-color: #00FF47;
+        border-radius: 50%;
+    }
+
+    #red_logo {
+        background-color: #DB2F2F;
         border-radius: 50%;
     }
 

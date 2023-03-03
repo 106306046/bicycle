@@ -1,40 +1,65 @@
 
 function start() {
 
-    change_to_running(true);
+    switch_change('warning');
 
 };
 
 function stop() {
 
-    change_to_running(false);
+    switch_change('default');
 
 }
-function change_to_running(ruuning) {
+
+function switch_change(status) {
 
     var default_div = document.getElementById("default");
     var running_div = document.getElementById("running");
+    var warning_div = document.getElementById("warning");
 
     var start_button = document.getElementById("start_button");
     var stop_button = document.getElementById("stop_button");
 
-    if (ruuning) {
+    switch (status) {
+        case 'default':
+            default_div.style.display = 'block';
+            running_div.style.display = 'none';
+            warning_div.style.display = 'none';
 
-        default_div.style.display = 'none';
-        running_div.style.display = 'block';
+            start_button.style.display = 'block';
+            stop_button.style.display = 'none';
 
-        start_button.style.display = 'none';
-        stop_button.style.display = 'block';
+            break;
 
-    } else {
-        default_div.style.display = 'block';
-        running_div.style.display = 'none';
+        case 'running':
+            default_div.style.display = 'none';
+            running_div.style.display = 'block';
+            warning_div.style.display = 'none';
 
-        start_button.style.display = 'block';
-        stop_button.style.display = 'none';
+            start_button.style.display = 'none';
+            stop_button.style.display = 'block';
+
+            break;
+
+        case 'warning':
+            default_div.style.display = 'none';
+            running_div.style.display = 'none';
+            warning_div.style.display = 'block';
+
+            start_button.style.display = 'none';
+            stop_button.style.display = 'block';
+
+            break;
+
+        default:
+            console.log(`no switch stauts: ${expr}`);
     }
+
 }
 function setContent(id, new_content) {
     let div = document.getElementById(id);
     div.innerHTML = new_content.toString;
 }
+
+///ultra-distance
+
