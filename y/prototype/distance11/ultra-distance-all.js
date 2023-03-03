@@ -284,7 +284,7 @@ function check_array(a, b) {
 
 function start() {
 
-    switch_change('warning');
+    switch_change('running');
 
     broadcaster = setInterval(() => {
         broadcast(0);
@@ -296,7 +296,11 @@ function start() {
     }, 33);
 
     listen_timer = setTimeout(() => {
+
         switch_change('warning');
+        broadcaster = null;
+        listen_timer = null;
+
     }, 5000);
 
 };
