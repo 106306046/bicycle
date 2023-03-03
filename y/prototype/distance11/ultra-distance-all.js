@@ -280,6 +280,7 @@ function start() {
 
     switch_change('running');
 
+    clearInterval(broadcaster);
     broadcaster = setInterval(() => {
         broadcast(0);
         try {
@@ -289,6 +290,7 @@ function start() {
         } catch { };
     }, 33);
 
+    clearTimeout(listen_timer);
     listen_timer = setTimeout(() => {
 
         switch_change('warning');
