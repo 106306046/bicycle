@@ -1,3 +1,7 @@
+//
+let listen_timer = null;
+let broadcaster = null;
+
 // DEVICES
 let isIOS = 'webkitAudioContext' in window;
 
@@ -99,7 +103,8 @@ const FR_LIST = [
 //const BANDWIDTH = 4;
 
 //#region Broadcast Sound Code
-const tranMessage = 11; // 396 四進位 00 -> 0, 01 -> 1, 10 -> 2, 11 -> 3
+const tranMessage = 11;
+const binary_recMessage = [0, 1, 1, 1];
 
 let SI_BC = null;
 let message = '';
@@ -244,77 +249,112 @@ function listen() {
             }
         }
     }
+
+    //check receive
+    if (check_array(code[0], binary_recMessage) || check_array(code[1], binary_recMessage)) {
+        // alert('收到');
+
+        listen_timer = null;
+        listen_timer = setTimeout(() => {
+            switch_change('warning');
+        }, 5000);
+
+    }
+
     RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
+
+function check_array(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
+
+
 // setInterval(listen, 33);
 //#endregion
 
 /**********************************************************************************************/
+//button.js
 
-//#region Draw
-// CANVAS
-const canvas = document.getElementById('canvas');
-const canvasContext = canvas.getContext('2d');
-canvas.width = screen.width;
-canvas.height = screen.height / 2;
-canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+function start() {
 
-function draw() {
-    try {
-        // requestAnimationFrame(draw);
+    switch_change('warning');
 
-        canvasContext.fillStyle = 'rgb(200, 200, 200)';
-        canvasContext.fillRect(0, 0, screen.width, screen.height);
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(0, 0, 0)';
-        canvasContext.beginPath();
+    broadcaster = setInterval(() => {
+        broadcast(0);
+        try {
+            analyser.getByteFrequencyData(dataArray);
+            if (isListenReady) listen();
+            else beforeListen();
+        } catch { };
+    }, 33);
 
-        let startPoint = 800; //0;
-        let endPoint = 900; // bufferLength;
-        let length = endPoint - startPoint;
-        let sliceWidth = (canvas.width * 1.0) / length;
-        let x = 0;
-        for (let i = startPoint; i < endPoint; i++) {
-            let v = dataArray[i];
-            let y = -v + canvas.height;
+    listen_timer = setTimeout(() => {
+        switch_change('warning');
+    }, 5000);
 
-            if (i === startPoint) canvasContext.moveTo(x, y);
-            else canvasContext.lineTo(x, y);
+};
 
-            x += sliceWidth;
-        }
+function stop() {
 
-        canvasContext.lineTo(canvas.width, canvas.height);
-        canvasContext.stroke();
+    switch_change('default');
 
-        canvasContext.beginPath();
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(255, 0, 0)';
-        canvasContext.moveTo(0, -threshold[0] + canvas.height);
-        canvasContext.lineTo(canvas.width, -threshold[0] + canvas.height);
-        canvasContext.stroke();
+    broadcaster = null;
+    listen_timer = null;
 
-        canvasContext.beginPath();
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(0, 255, 0)';
-        canvasContext.moveTo(0, -threshold[1] + canvas.height);
-        canvasContext.lineTo(canvas.width, -threshold[1] + canvas.height);
-        canvasContext.stroke();
-    } catch { }
 }
-draw();
-//#endregion
 
-/**********************************************************************************************/
+function switch_change(status) {
 
-setInterval(() => {
-    try {
-        analyser.getByteFrequencyData(dataArray);
-        if (isListenReady) listen();
-        else beforeListen();
-        THRESH.innerText = `${dataBuffer.length}: AVG { ${avgThreshold[0]} | ${avgThreshold[1]} }`;
-        draw();
-    } catch { }
+    var default_div = document.getElementById("default");
+    var running_div = document.getElementById("running");
+    var warning_div = document.getElementById("warning");
 
-    console.log(dataArray);
-}, 33);
+    var start_button = document.getElementById("start_button");
+    var stop_button = document.getElementById("stop_button");
+
+    switch (status) {
+        case 'default':
+            default_div.style.display = 'block';
+            running_div.style.display = 'none';
+            warning_div.style.display = 'none';
+
+            start_button.style.display = 'block';
+            stop_button.style.display = 'none';
+
+            break;
+
+        case 'running':
+            default_div.style.display = 'none';
+            running_div.style.display = 'block';
+            warning_div.style.display = 'none';
+
+            start_button.style.display = 'none';
+            stop_button.style.display = 'block';
+
+            break;
+
+        case 'warning':
+            default_div.style.display = 'none';
+            running_div.style.display = 'none';
+            warning_div.style.display = 'block';
+
+            start_button.style.display = 'none';
+            stop_button.style.display = 'block';
+
+            break;
+
+        default:
+            console.log(`no switch stauts: ${expr}`);
+    }
+
+}
+
+
+

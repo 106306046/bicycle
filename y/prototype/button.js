@@ -61,5 +61,4 @@ function setContent(id, new_content) {
     div.innerHTML = new_content.toString;
 }
 
-///ultra-distance
 
