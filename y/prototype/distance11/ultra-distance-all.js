@@ -1,6 +1,6 @@
 //
-let listen_timer = null;
-let broadcaster = null;
+var listen_timer = null;
+var broadcaster = null;
 
 // DEVICES
 let isIOS = 'webkitAudioContext' in window;
@@ -248,9 +248,11 @@ function listen() {
     if (check_array(code[0], binary_recMessage) || check_array(code[1], binary_recMessage)) {
         // alert('收到');
 
-        listen_timer = null;
+        clearTimeout(listen_timer);
         listen_timer = setTimeout(() => {
             switch_change('warning');
+            clearInterval(broadcaster);
+            clearTimeout(listen_timer);
         }, 5000);
 
     }
@@ -290,8 +292,8 @@ function start() {
     listen_timer = setTimeout(() => {
 
         switch_change('warning');
-        broadcaster = null;
-        listen_timer = null;
+        clearInterval(broadcaster);
+        clearTimeout(listen_timer);
 
     }, 5000);
 
@@ -301,8 +303,8 @@ function stop() {
 
     switch_change('default');
 
-    broadcaster = null;
-    listen_timer = null;
+    clearInterval(broadcaster);
+    clearTimeout(listen_timer);
 
 }
 
