@@ -88,9 +88,6 @@ function handleError(error) {
 
 /************************************************************************************************/
 
-const RECVMSG = document.getElementById('display');
-const CONSOLE = document.getElementById('console');
-const THRESH = document.getElementById('thresh');
 
 const IDX_LIST = [
     [826, 828, 830, 832, 834],
@@ -192,9 +189,6 @@ function beforeListen() {
 }
 
 function listen() {
-    CONSOLE.innerText = '';
-    RECVMSG.innerText = '';
-    THRESH.innerText = '';
 
     let curThreshold = [
         [0, 0, 0, 0],
@@ -260,8 +254,6 @@ function listen() {
         }, 5000);
 
     }
-
-    RECVMSG.innerHTML = `${code[0]} | ${code[1]}`;
 }
 
 function check_array(a, b) {
