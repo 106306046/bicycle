@@ -278,7 +278,7 @@ function start() {
     switch_change('running');
     broadcaster = setInterval(() => {
 
-        broadcast(0);
+        broadcast(1);
 
     }, 33);
     listener = setInterval(() => {
