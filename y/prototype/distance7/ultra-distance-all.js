@@ -103,7 +103,7 @@ const FR_LIST = [
 
 //#region Broadcast Sound Code
 const tranMessage = 7;
-binary_recMessage = [1, 0, 1, 1];
+const binary_recMessage = [1, 0, 1, 1];
 
 let SI_BC = null;
 let message = '';
