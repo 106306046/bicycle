@@ -283,7 +283,6 @@ function start() {
     }, 33);
     listener = setInterval(() => {
         try {
-            console.log('hi');
             analyser.getByteFrequencyData(dataArray);
             if (isListenReady) listen();
             else beforeListen();
@@ -301,7 +300,7 @@ function start() {
                 listener = null;
             }
             if (listen_timer) {
-                clearInterval(listen_timer); d
+                clearInterval(listen_timer);
                 listen_timer = null;
             }
             switch_change('warning');
