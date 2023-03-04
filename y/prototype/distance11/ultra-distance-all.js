@@ -321,7 +321,7 @@ function stop() {
         listener = null;
     }
     if (listen_timer) {
-        clearInterval(listen_timer); d
+        clearInterval(listen_timer);
         listen_timer = null;
     }
     switch_change('default');
