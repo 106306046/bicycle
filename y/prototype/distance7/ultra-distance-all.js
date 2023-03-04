@@ -38,13 +38,13 @@ if (isIOS) {
         {
             audio: {
                 optional: [
-                    { echoCancellation: false },
-                    { mozAutoGainControl: false },
-                    { mozNoiseSuppression: false },
-                    { googEchoCancellation: false },
-                    { googAutoGainControl: false },
-                    { googNoiseSuppression: false },
-                    { googHighpassFilter: false },
+                    { echoCancellation: true },
+                    { mozAutoGainControl: true },
+                    { mozNoiseSuppression: true },
+                    { googEchoCancellation: true },
+                    { googAutoGainControl: true },
+                    { googNoiseSuppression: true },
+                    { googHighpassFilter: true },
                 ],
             },
             video: false,
