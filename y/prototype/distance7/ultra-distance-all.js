@@ -292,12 +292,18 @@ function start() {
 
     listen_timer = setInterval(() => {
         if (listened == false) {
-            clearInterval(broadcaster);
-            broadcaster = null;
-            clearInterval(listener);
-            listener = null;
-            clearInterval(listen_timer);
-            listen_timer = null;
+            if (broadcaster) {
+                clearInterval(broadcaster);
+                broadcaster = null;
+            }
+            if (listener) {
+                clearInterval(listener);
+                listener = null;
+            }
+            if (listen_timer) {
+                clearInterval(listen_timer); d
+                listen_timer = null;
+            }
             switch_change('warning');
         } else {
             listened = false;
@@ -307,13 +313,18 @@ function start() {
 };
 
 function stop() {
-
-    clearInterval(broadcaster);
-    broadcaster = null;
-    clearInterval(listener);
-    listener = null;
-    clearInterval(listen_timer); d
-    listen_timer = null;
+    if (broadcaster) {
+        clearInterval(broadcaster);
+        broadcaster = null;
+    }
+    if (listener) {
+        clearInterval(listener);
+        listener = null;
+    }
+    if (listen_timer) {
+        clearInterval(listen_timer); d
+        listen_timer = null;
+    }
     switch_change('default');
 
 }
