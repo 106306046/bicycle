@@ -21,13 +21,13 @@ if (isIOS) {
     navigator.mediaDevices
         .getUserMedia({
             audio: {
-                echoCancellation: true,
-                mozAutoGainControl: true,
-                mozNoiseSuppression: true,
-                googEchoCancellation: true,
-                googAutoGainControl: true,
-                googNoiseSuppression: true,
-                googHighpassFilter: true
+                echoCancellation: false,
+                mozAutoGainControl: false,
+                mozNoiseSuppression: false,
+                googEchoCancellation: false,
+                googAutoGainControl: false,
+                googNoiseSuppression: false,
+                googHighpassFilter: false,
             },
             video: false,
         })
@@ -38,13 +38,13 @@ if (isIOS) {
         {
             audio: {
                 optional: [
-                    { echoCancellation: true },
-                    { mozAutoGainControl: true },
-                    { mozNoiseSuppression: true },
-                    { googEchoCancellation: true },
-                    { googAutoGainControl: true },
-                    { googNoiseSuppression: true },
-                    { googHighpassFilter: true },
+                    { echoCancellation: false },
+                    { mozAutoGainControl: false },
+                    { mozNoiseSuppression: false },
+                    { googEchoCancellation: false },
+                    { googAutoGainControl: false },
+                    { googNoiseSuppression: false },
+                    { googHighpassFilter: false },
                 ],
             },
             video: false,
