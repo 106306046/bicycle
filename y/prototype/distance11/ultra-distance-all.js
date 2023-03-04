@@ -280,7 +280,7 @@ function start() {
 
         broadcast(0);
 
-    }, 33);
+    }, 100);
     listener = setInterval(() => {
         try {
             analyser.getByteFrequencyData(dataArray);
